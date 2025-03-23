@@ -1,10 +1,27 @@
+'use client'
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { headers } from "next/headers";
+import toast from "react-hot-toast";
 
 
 
 export let isLoadingData = false ;
+
+const handleNavigation = (userrole) => {
+    switch(userrole) {
+      case "superadmin":
+        return "/admin/dashboard";
+      case "hradmin":
+        return "/hradmin/dashboard";
+      case "hruser":
+        return "/hr/dashboard";
+      case "student":
+        return "/student/dashboard";
+      default:
+        return "/landing";
+    }
+  };
+
 export const login = createAsyncThunk(
     "api/login",
     async (values)=>{
@@ -53,10 +70,24 @@ const authSlice = createSlice({
         window.location.replace('/');
     }
   },
-  extraReducers: (builder) => {
-    builder
-    .addCase
-  }
+   extraReducers: (builder) => {
+        builder
+        .addCase(login.pending, (state) => {
+            state.state = "loading";
+        })
+        .addCase(login.fulfilled, (state, action) => {
+            state.state = "succeeded";
+            state.userData = action.payload;
+            state.accessToken = action.payload.token;
+            localStorage.setItem("userData", JSON.stringify(action.payload));
+            window.location.replace(handleNavigation(data.userrole));
+        })
+        .addCase(login.rejected, (state, action) => {
+            state.state = "failed";
+            state.error = action.error.message || action.payload.message;
+        });
+
+    }
 });
 
 
