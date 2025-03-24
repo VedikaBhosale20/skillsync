@@ -1,8 +1,9 @@
 'use client'
 import React from "react";
 import { Flex, Layout } from "antd";
+import Sidebar from "@/components/dashboard/Sidebar";
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer, Content } = Layout;
 
 const headerStyle = {
     textAlign: 'center',
@@ -35,9 +36,7 @@ const headerStyle = {
 
     <Flex gap='middle' wrap>
         <Layout style={layoutStyle}>
-      <Sider width="25%" style={siderStyle}>
-        Sider
-      </Sider>
+        <Sidebar />
       <Layout>
         <Header style={headerStyle}>Header</Header> //navbar which i will make in the components folder 
         <Content style={contentStyle}>{children}</Content> 

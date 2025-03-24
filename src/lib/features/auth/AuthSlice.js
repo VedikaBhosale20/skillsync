@@ -2,40 +2,44 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 
 
 export let isLoadingData = false ;
 
+
 const handleNavigation = (userrole) => {
+  const router = useRouter();
     switch(userrole) {
       case "superadmin":
-        return "/admin/dashboard";
+        router.push("/admin/");
       case "hradmin":
-        return "/hradmin/dashboard";
+        router.push("/hradmin/dashboard/");
       case "hruser":
-        return "/hr/dashboard";
+        router.push("/hruser/");
       case "student":
-        return "/student/dashboard";
+        router.push("/student/");
       default:
-        return "/landing";
+        router.push("/");
     }
   };
 
-export const login = createAsyncThunk(
-    "api/login",
+export const UserLogin = createAsyncThunk(
+    "UserApi/Login",
     async (values)=>{
      isLoadingData = true ;
      try{
         let res = await axios
         .post(
-            `${process.env.API_URL}/api/login`,
+            `${process.env.API_URL}/UserApi/Login`,
             values
         )
         isLoadingData = false;
         if(res.data.mtype === "success")
         {
             toast.success(`Welcome ${res.data.username}`)
+            handleNavigation(res.data.rolename);
             return res.data;
         }
         if(res.data.mtype === "warning")
@@ -72,17 +76,16 @@ const authSlice = createSlice({
   },
    extraReducers: (builder) => {
         builder
-        .addCase(login.pending, (state) => {
+        .addCase(UserLogin.pending, (state) => {
             state.state = "loading";
         })
-        .addCase(login.fulfilled, (state, action) => {
+        .addCase(UserLogin.fulfilled, (state, action) => {
             state.state = "succeeded";
             state.userData = action.payload;
             state.accessToken = action.payload.token;
             localStorage.setItem("userData", JSON.stringify(action.payload));
-            window.location.replace(handleNavigation(data.userrole));
         })
-        .addCase(login.rejected, (state, action) => {
+        .addCase(UserLogin.rejected, (state, action) => {
             state.state = "failed";
             state.error = action.error.message || action.payload.message;
         });

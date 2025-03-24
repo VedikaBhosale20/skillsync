@@ -34,7 +34,7 @@ export default function Sidebar() {
         {isExpanded && (
               <div className="ml-4 pl-4 border-l-2 border-blue-200">
                 <div className="py-1">
-                  <Link href="/hradmin/dashboard/homepage" className="block py-2 px-2 text-blue-800 hover:bg-blue-50 rounded-md bg-blue-100">
+                  <Link href="/hradmin/" className="block py-2 px-2 text-blue-800 hover:bg-blue-50 rounded-md bg-blue-100">
                     My Homepage
                   </Link>
                 </div>
