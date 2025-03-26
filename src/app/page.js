@@ -17,3 +17,5 @@ export default function Home() {
   );
 }
 Home.layout = RootLayout
+//landing page 
+//use next router 

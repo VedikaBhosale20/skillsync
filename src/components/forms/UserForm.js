@@ -1,24 +1,19 @@
 "use client" ;
 
+import { User } from "@/models/User";
 import { useFormik } from "formik";
 import * as Yup from "yup" ;
 
 export default function userForm() {
 
-    const validationSchema = Yup.object ({
-       username:Yup.string().required("Username is required"),
-       email: Yup.string().email("Invalid email").required("Email is required"),
-       password:  Yup.string().required("Password is required")
-       .min(6, "Password must be at least 6 characters"),
-    });
-
+    
     const formik = useFormik({
         initialValues:{
             name: "" ,
             email: "" ,
             password: "" ,    
          } ,
-         validationSchema ,
+         validationSchema: User, 
          onSubmit : (values) => {
             console.log("User Form Submited: ", values);
             alert("User Registration successful!") ;

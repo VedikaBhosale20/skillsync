@@ -1,84 +1,83 @@
 "use client";
-import React from 'react';
+import React from "react";
 
-//redux imports
+// Redux imports
 import { useSelector, useDispatch } from "react-redux";
-import { UserLogin, isLoadingData } from '@/lib/features/auth/AuthSlice';
+import { UserLogin, isLoadingData } from "@/lib/features/auth/AuthSlice";
 
-//formik imports
+// Formik imports
 import { useFormik } from "formik";
-import { SignInSchema } from '@/models/SignIn';
-
+import { SignInSchema } from "@/models/SignIn";
 
 const Login = () => {
-    const dispatch = useDispatch();
-    const formik = useFormik({
-      initialValues: {
-        username: "",
-        password: "",
-      },
-      validationSchema: SignInSchema,
-      onSubmit: async (values) => {
-        dispatch(UserLogin(values));
-      }
-    });
+  const dispatch = useDispatch();
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: SignInSchema,
+    onSubmit: async (values) => {
+      dispatch(UserLogin(values));
+    },
+  });
+
   return (
-    <div>
-                <form onSubmit={formik.handleSubmit} > 
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                      id="username"
-                    >
-                      Username
-                    </label>
-                    <input
-                      type="text"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      {...formik.getFieldProps("username")}
-                      placeholder="Username"
-                      id="username"
-                    />
-                    {formik.errors.username ? (
-                              <div className="mt-1 text-red-600">{formik.errors.username}</div>
-                            ) : null}
-                  </div>
+    <div className="flex items-center justify-center h-screen bg-gradient-to-r from-blue-300 to-indigo-600">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Sign In</h2>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="username" className="block text-sm font-medium text-gray-600 mb-2">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              {...formik.getFieldProps("username")}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition-all duration-150 ease-in-out ${
+                formik.errors.username && formik.touched.username ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="Enter your username"
+            />
+            {formik.errors.username && formik.touched.username && (
+              <p className="mt-1 text-sm text-red-600">{formik.errors.username}</p>
+            )}
+          </div>
 
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                      id="password"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      {...formik.getFieldProps("password")}
-                      placeholder="Password"
-                      id="password"
-                    />
-                    {formik.errors.password ? (
-                      <div className="mt-1 text-red-600">{formik.errors.password}</div>
-                    ) : null}
-                  </div>
-                  <div>
-                  </div>
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              {...formik.getFieldProps("password")}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition-all duration-150 ease-in-out ${
+                formik.errors.password && formik.touched.password ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="Enter your password"
+            />
+            {formik.errors.password && formik.touched.password && (
+              <p className="mt-1 text-sm text-red-600">{formik.errors.password}</p>
+            )}
+          </div>
 
-                  <div className="text-center mt-6">
-                    <button
-                      className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="submit"
-                      disabled={isLoadingData}
-                    >
-                      {isLoadingData ? "Loading" : "Sign In"}
-                    </button>
-                  </div>
-                </form>
+          <button
+            type="submit"
+            className={`w-full bg-blue-600 text-white py-3 rounded-lg text-sm font-semibold uppercase tracking-wide hover:bg-blue-700 transition-all duration-200 ease-in-out shadow-md focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 disabled:bg-gray-300 disabled:cursor-not-allowed`}
+            disabled={isLoadingData}
+          >
+            {isLoadingData ? "Loading..." : "Sign In"}
+          </button>
+        </form>
+
+        <p className="mt-4 text-center text-sm text-gray-500">
+          Don't have an account? <a href="#" className="text-blue-500 hover:underline">Sign Up</a>
+        </p>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
