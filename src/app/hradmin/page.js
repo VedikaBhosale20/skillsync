@@ -6,8 +6,6 @@ import MetricsCard from '@/components/dashboard/MetricsCard';
 import ProcessesTable from '@/components/dashboard/ProcessesTable';
 import TasksSection from '@/components/dashboard/TasksSection';
 import InboxSection from '@/components/dashboard/InboxSection';
-import Sidebar from '@/components/dashboard/Sidebar';
-import Superadmin from '@/layout/Superadmin';
 
 export default function HRAdminDashboard() {
   const { userData } = useSelector((state) => state.auth);
@@ -44,12 +42,7 @@ export default function HRAdminDashboard() {
 
   return (
     <div className="flex w-full min-h-screen bg-gray-100">
-      
-      <Sidebar />
-      
-    
-      <div className="flex-1 p-6">
-       
+    <div className="flex-1 p-6">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold text-blue-600">Dashboard</h1>
@@ -102,4 +95,3 @@ export default function HRAdminDashboard() {
     </div>
   );
 }
-HRAdminDashboard.layout=Superadmin

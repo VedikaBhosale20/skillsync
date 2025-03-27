@@ -3,6 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 
 
+
 // Redux imports
 import { useSelector, useDispatch } from "react-redux";
 import { UserLogin } from "@/lib/features/auth/AuthSlice";
@@ -11,12 +12,23 @@ import { UserLogin } from "@/lib/features/auth/AuthSlice";
 import { useFormik } from "formik";
 import { SignInSchema } from "@/models/SignIn";
 
-const Login = () => {
+export default function Login () {
   const dispatch = useDispatch();
   const router = useRouter();
   const isLoading = useSelector((state) => state.auth.isLoading);
   const initialusername = useSelector((state) => state.auth.regData.username);
   const initialpassword = useSelector((state) => state.auth.regData.password);
+  const [userData, setUserData] = React.useState("");
+  React.useEffect(() => {
+    try{
+      const data = JSON.parse(localStorage.getItem("userData"));
+      setUserData(data)
+    }
+    catch(err)
+    {
+      console.error("Error Parsing user data" + err)
+    }
+  }, []);
   const handleNavigation = (userrole) => {
     switch (userrole) {
       case "superadmin":
@@ -51,6 +63,10 @@ const Login = () => {
     },
   });
 
+  if (userData && userData.rolename) {
+    (handleNavigation(userData.rolename));
+    return;
+  }
   return (
     <div className="flex items-center justify-center h-screen bg-gradient-to-r from-blue-300 to-indigo-600">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
@@ -108,5 +124,3 @@ const Login = () => {
     </div>
   );
 };
-
-export default Login;

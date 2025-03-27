@@ -6,8 +6,10 @@ import {
   FileText, 
   BarChart2, 
   Settings, 
-  PlusCircle 
+  PlusCircle,
+  Workflow
 } from 'lucide-react';
+import { icons } from 'antd/es/image/PreviewGroup';
 
 export default function SuperAdminDashboard() {
   const dashboardStats = [
@@ -34,8 +36,8 @@ export default function SuperAdminDashboard() {
   const quickActions = [
     { 
       icon: PlusCircle, 
-      title: 'Add New Job', 
-      description: 'Create a new job listing' 
+      title: 'Add A Client', 
+      description: 'Create a new client profile' 
     },
     { 
       icon: BarChart2, 
@@ -45,7 +47,12 @@ export default function SuperAdminDashboard() {
     { 
       icon: Settings, 
       title: 'System Configuration', 
-      description: 'Manage recruitment settings' 
+      description: 'Manage System settings' 
+    },
+    {
+      icon: Workflow,
+      title: 'Post a Job',
+      description: 'Create a new job listing'
     }
   ];
 

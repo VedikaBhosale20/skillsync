@@ -1,8 +1,22 @@
+'use client'
 import React , { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function Sidebar() {
-    const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [userData, setUserData] = React.useState("");
+  const router = useRouter();
+  React.useEffect(() => {
+    try{
+      const data = JSON.parse(localStorage.getItem("userData"));
+      setUserData(data)
+    }
+    catch(err)
+    {
+      console.error("Error Parsing user data" + err)
+    }
+  }, []);
   return (
     <div className="w-64 bg-white shadow-md h-screen">
       <div className="p-4 border-b">
@@ -51,22 +65,26 @@ export default function Sidebar() {
               </div>
             )}
           </li>
-          <li className="mb-2">
-            <Link href="/hradmin/accounts" className="flex items-center space-x-2 p-2 hover:bg-gray-100 text-blue-800 rounded-md">
+          {userData !== null && userData.rolename === "superadmin" && (
+            <>
+            <li className="mb-2">
+            <a href="#" className="flex items-center space-x-2 p-2 hover:bg-gray-100 text-blue-800 rounded-md"
+            onClick={() => router.push("/admin/accountsdashboard")}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
               </svg>
               <span>Accounts</span>
-            </Link>
+            </a>
           </li>
           <li className="mb-2">
-            <Link href="/hradmin/hires" className="flex items-center space-x-2 p-2 hover:bg-gray-100 text-blue-800 rounded-md">
+            <a href="/hradmin/hires" className="flex items-center space-x-2 p-2 hover:bg-gray-100 text-blue-800 rounded-md">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
               </svg>
-              <span>Hires</span>
-            </Link>
+              <span>Clients</span>
+            </a>
           </li>
+          </>)}
         </ul>
       </div>
     </div>

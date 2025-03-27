@@ -32,6 +32,11 @@ export default function Home() {
     setIsModalVisible(false);
   };
 
+  const handleOk = () => {
+    setIsModalVisible(false);
+    window.location.replace('auth');
+  }
+
   const features = [
     {
       icon: <RobotOutlined style={{ fontSize: '48px', color: '#1890ff' }} />,
@@ -111,6 +116,8 @@ export default function Home() {
           title="Welcome to SkillSync AI"
           open={isModalVisible}
           onCancel={handleCancel}
+          okText="Login"
+          onOk={handleOk}
         >
           <Paragraph>
             Ready to transform your HR processes? Register to get started.
