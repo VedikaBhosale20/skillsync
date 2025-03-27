@@ -16,7 +16,7 @@ export default function StudentForm() {
             name: "" ,
             email: "" ,
             degree: "" ,
-            skills: "",     
+            skills: "",
          } ,
          validationSchema ,
          onSubmit : (values) => {

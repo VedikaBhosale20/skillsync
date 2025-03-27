@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
+
 
 // Redux imports
 import { useSelector, useDispatch } from "react-redux";
-import { UserLogin, isLoadingData } from "@/lib/features/auth/AuthSlice";
+import { UserLogin } from "@/lib/features/auth/AuthSlice";
 
 // Formik imports
 import { useFormik } from "formik";
@@ -11,14 +13,41 @@ import { SignInSchema } from "@/models/SignIn";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const isLoading = useSelector((state) => state.auth.isLoading);
+  const initialusername = useSelector((state) => state.auth.regData.username);
+  const initialpassword = useSelector((state) => state.auth.regData.password);
+  const handleNavigation = (userrole) => {
+    switch (userrole) {
+      case "superadmin":
+        router.push("/admin");
+        break;
+      case "hradmin":
+        router.push("/hradmin");
+        break;
+      case "hruser":
+        router.push("/hruser");
+        break;
+      case "student":
+        router.push("/student");
+        break;
+      default:
+        router.push("/");
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
+      username: initialusername || "",
+      password: initialpassword || ""
     },
     validationSchema: SignInSchema,
     onSubmit: async (values) => {
-      dispatch(UserLogin(values));
+      const resultAction = await dispatch(UserLogin(values));
+      if (UserLogin.fulfilled.match(resultAction)) {
+        const userData = await JSON.parse(localStorage.getItem("userData"))
+        handleNavigation(userData.rolename);
+      }
     },
   });
 
@@ -35,7 +64,7 @@ const Login = () => {
               type="text"
               id="username"
               {...formik.getFieldProps("username")}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition-all duration-150 ease-in-out ${
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 text-black focus:ring-blue-500 focus:outline-none shadow-sm transition-all duration-150 ease-in-out ${
                 formik.errors.username && formik.touched.username ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="Enter your username"
@@ -53,7 +82,7 @@ const Login = () => {
               type="password"
               id="password"
               {...formik.getFieldProps("password")}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition-all duration-150 ease-in-out ${
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 text-black focus:ring-blue-500 focus:outline-none shadow-sm transition-all duration-150 ease-in-out ${
                 formik.errors.password && formik.touched.password ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="Enter your password"
@@ -66,14 +95,14 @@ const Login = () => {
           <button
             type="submit"
             className={`w-full bg-blue-600 text-white py-3 rounded-lg text-sm font-semibold uppercase tracking-wide hover:bg-blue-700 transition-all duration-200 ease-in-out shadow-md focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 disabled:bg-gray-300 disabled:cursor-not-allowed`}
-            disabled={isLoadingData}
+            disabled={isLoading}
           >
-            {isLoadingData ? "Loading..." : "Sign In"}
+            {isLoading ? "Loading..." : "Sign In"}
           </button>
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-500">
-          Don't have an account? <a href="#" className="text-blue-500 hover:underline">Sign Up</a>
+          Don't have an account? <a href="/" className="text-blue-500 hover:underline">Register</a>
         </p>
       </div>
     </div>
