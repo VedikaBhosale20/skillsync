@@ -91,6 +91,73 @@ export const Register = createAsyncThunk(
   }
 )
 
+export const GetUnAssignedUsers = createAsyncThunk(
+    "UserApi/GetUnAssignedUsers",
+    async (values) => {
+        isLoadingData = true;
+        try {
+            let res = await axios.get(
+                `${process.env.API_URL}/UserApi/GetUnAssignedUsers`,
+                {
+                    headers: {
+                        "userid": values.userid,
+                        "rolename": values.rolename,
+                        "Authorization": `Bearer ${values.token}`
+                    }
+                }
+            );
+            isLoadingData = false;
+            if(res.data.mtype === "success")
+                {
+                    toast.success(res.data.message);
+                    return res.data;
+                }
+                if(res.data.mtype === "warning")
+                {
+                    toast.error(res.data.message);
+                    return res.data;
+                }
+        } catch (ex) {
+            toast.error(ex.message);
+            return ex.message;
+        }
+    }
+)
+
+export const ApproveUnAssignedUsers = createAsyncThunk(
+    "UserApi/ApproveUnAssignedUsers",
+    async (values) => {
+        isLoadingData = true;
+        try {
+            let res = await axios.get(
+                `${process.env.API_URL}/UserApi/ApproveUnAssignedUsers`,
+                {
+                    headers: {
+                        "userid": values.userid,
+                        "rolename": values.rolename,
+                        "approvalid": values.approvalid,
+                        "Authorization": `Bearer ${values.token}`
+                    }
+                }
+            );
+            isLoadingData = false;
+            if(res.data.mtype === "success")
+                {
+                    toast.success(res.data.message);
+                    return res.data;
+                }
+                if(res.data.mtype === "warning")
+                {
+                    toast.error(res.data.message);
+                    return res.data;
+                }
+        } catch (ex) {
+            toast.error(ex.message);
+            return ex.message;
+        }
+    }
+)
+
 const authSlice = createSlice({
   name: "auth",
   initialState : {
@@ -99,7 +166,8 @@ const authSlice = createSlice({
     isLoading: false,
     state: "idle", 
     error: "" ,
-    accessToken: ""
+    accessToken: "",
+    unAssignedUsers: []
   }, 
   reducers: {
     handleLogout: (state) => {
@@ -135,6 +203,33 @@ const authSlice = createSlice({
             state.isLoading = false;
         })
         .addCase(Register.rejected, (state, action) => {
+            state.state = "failed";
+            state.error = action.error.message || action.payload.message;
+            state.isLoading = false;
+        })
+        .addCase(GetUnAssignedUsers.pending, (state) => {
+            state.state = "loading";
+            state.isLoading = true;
+        })
+        .addCase(GetUnAssignedUsers.fulfilled, (state, action) => {
+            state.state = "succeeded";
+            state.unAssignedUsers = action.payload.UnAssignedUsers || [];
+            state.isLoading = false;
+        })
+        .addCase(GetUnAssignedUsers.rejected, (state, action) => {
+            state.state = "failed";
+            state.error = action.error.message || action.payload.message;
+            state.isLoading = false;
+        })
+        .addCase(ApproveUnAssignedUsers.pending, (state) => {
+            state.state = "loading";
+            state.isLoading = true;
+        })
+        .addCase(ApproveUnAssignedUsers.fulfilled, (state, action) => {
+            state.state = "succeeded";
+            state.isLoading = false;
+        })
+        .addCase(ApproveUnAssignedUsers.rejected, (state, action) => {
             state.state = "failed";
             state.error = action.error.message || action.payload.message;
             state.isLoading = false;
