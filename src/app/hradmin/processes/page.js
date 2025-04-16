@@ -1,20 +1,24 @@
 "use client";
 
 import React from 'react';
-import { useSelector } from 'react-redux';
 import ProcessesTable from '@/components/dashboard/ProcessesTable';
-import Sidebar from '@/components/dashboard/Sidebar';
 import Link from 'next/link';
 
 
 export default function HRAdminDashboard(){
-    const { userData } = useSelector((state) => state.auth);
+
+    const [userData, setUserData] = React.useState(null);
+    React.useEffect(() => {
+      try {
+        const data = JSON.parse(localStorage.getItem("userData"));
+        setUserData(data);
+      } catch(err) {
+        console.error("Error Parsing user data:", err);
+      }
+    }, []);
 
     return (
         <div className="flex w-full min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <Sidebar />
-      
       {/* Main Content */}
       <div className="flex-1 p-6">
         {/* Header */}

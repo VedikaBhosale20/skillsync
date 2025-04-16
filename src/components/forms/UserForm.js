@@ -2,7 +2,6 @@
 
 import { User } from "@/models/User";
 import { useFormik } from "formik";
-import * as Yup from "yup" ;
 
 export default function userForm() {
 

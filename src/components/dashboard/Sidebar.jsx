@@ -48,19 +48,44 @@ export default function Sidebar() {
         {isExpanded && (
               <div className="ml-4 pl-4 border-l-2 border-blue-200">
                 <div className="py-1">
-                  <Link href="/hradmin/" className="block py-2 px-2 text-blue-800 hover:bg-blue-50 rounded-md bg-blue-100">
+                  <a onClick={() =>{
+                    if(userData !== null && userData.rolename === "hradmin")
+                      router.push("/hradmin")
+                    else
+                      router.push("/admin")
+                  }} className="block py-2 px-2 text-blue-800 hover:bg-blue-50 rounded-md bg-blue-100">
                     My Homepage
-                  </Link>
+                  </a>
                 </div>
                 <div className="py-1">
-                  <Link href="/hradmin/dashboard/processes" className="block py-2 px-2 text-gray-600 hover:bg-blue-50 rounded-md">
+                  <a onClick={() =>{
+                    if(userData !== null && userData.rolename === "hradmin")
+                      router.push("/hradmin/processes")
+                    else
+                      router.push("/admin/processes")
+                  }} className="block py-2 px-2 text-gray-600 hover:bg-blue-50 rounded-md">
                     Processes
-                  </Link>
+                  </a>
                 </div>
                 <div className="py-1">
-                  <Link href="/hradmin/messages" className="block py-2 px-2 text-gray-600 hover:bg-blue-50 rounded-md">
-                    Messages
-                  </Link>
+                  <a onClick={() =>{
+                    if(userData !== null && userData.rolename === "hradmin")
+                      router.push("/hradmin/addorganization")
+                    else
+                      router.push("/admin/addorganization")
+                  }} className="block py-2 px-2 text-gray-600 hover:bg-blue-50 rounded-md">
+                    Add Organization
+                  </a>
+                </div>
+                <div className="py-1">
+                  <a onClick={() =>{
+                    if(userData !== null && userData.rolename === "hradmin")
+                      router.push("/hradmin/addusers")
+                    else
+                      router.push("/admin/addusers")
+                  }} className="block py-2 px-2 text-gray-600 hover:bg-blue-50 rounded-md">
+                    Add Users
+                  </a>
                 </div>
               </div>
             )}

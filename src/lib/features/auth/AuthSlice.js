@@ -124,6 +124,39 @@ export const GetUnAssignedUsers = createAsyncThunk(
     }
 )
 
+export const GetApprovedUsers = createAsyncThunk(
+    "UserApi/GetApprovedUsers",
+    async (values) => {
+        isLoadingData = true;
+        try {
+            let res = await axios.get(
+                `${process.env.API_URL}/UserApi/GetApprovedUsers`,
+                {
+                    headers: {
+                        "userid": values.userid,
+                        "rolename": values.rolename,
+                        "Authorization": `Bearer ${values.token}`
+                    }
+                }
+            );
+            isLoadingData = false;
+            if(res.data.mtype === "success")
+                {
+                    toast.success(res.data.message);
+                    return res.data;
+                }
+                if(res.data.mtype === "warning")
+                {
+                    toast.error(res.data.message);
+                    return res.data;
+                }
+        } catch (ex) {
+            toast.error(ex.message);
+            return ex.message;
+        }
+    }
+)
+
 export const ApproveUnAssignedUsers = createAsyncThunk(
     "UserApi/ApproveUnAssignedUsers",
     async (values) => {
@@ -136,6 +169,7 @@ export const ApproveUnAssignedUsers = createAsyncThunk(
                         "userid": values.userid,
                         "rolename": values.rolename,
                         "approvalid": values.approvalid,
+                        "roletypeid": values.roletypeid,
                         "Authorization": `Bearer ${values.token}`
                     }
                 }
@@ -167,7 +201,8 @@ const authSlice = createSlice({
     state: "idle", 
     error: "" ,
     accessToken: "",
-    unAssignedUsers: []
+    unAssignedUsers: [],
+    approvedUsers: [],
   }, 
   reducers: {
     handleLogout: (state) => {
@@ -217,6 +252,20 @@ const authSlice = createSlice({
             state.isLoading = false;
         })
         .addCase(GetUnAssignedUsers.rejected, (state, action) => {
+            state.state = "failed";
+            state.error = action.error.message || action.payload.message;
+            state.isLoading = false;
+        })
+        .addCase(GetApprovedUsers.pending, (state) => {
+            state.state = "loading";
+            state.isLoading = true;
+        })
+        .addCase(GetApprovedUsers.fulfilled, (state, action) => {
+            state.state = "succeeded";
+            state.approvedUsers = action.payload.ApprovedUsers || [];
+            state.isLoading = false;
+        })
+        .addCase(GetApprovedUsers.rejected, (state, action) => {
             state.state = "failed";
             state.error = action.error.message || action.payload.message;
             state.isLoading = false;
