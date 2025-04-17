@@ -8,25 +8,15 @@ import toast from "react-hot-toast";
 export const CreateOrganization = createAsyncThunk(
     "UserApi/CreateOrganization",
     async(values) => {
-        let formData = new FormData();
-        for(const key in values)
-        {
-            if (key === "organizationlogo") {
-                cleanedValues.images.forEach((file) => {
-                    formData.append("organizationlogo", file);
-                });
-            } else {
-                formData.append(key, cleanedValues[key]);
-            }
-        };
         try{
         let res = await axios
         .post(`
             ${process.env.API_URL}/UserApi/CreateOrganization`,
-            formData,
+            values.formData,
             {
                 headers: {
-                    "Content-Type": "application/form-data"
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${values.token}`
                 }
             }
         )

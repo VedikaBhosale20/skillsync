@@ -1,7 +1,7 @@
 "use client";
 import * as Yup from "yup";
 
-export const Organization = Yup.object({
+export const OrganizationSchema = Yup.object({
     userid: Yup.number().required("User ID is required"),
     rolename: Yup.string().required("Role name is required"),
     organizationname: Yup.string().required("Organization name is required"),
