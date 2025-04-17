@@ -192,6 +192,43 @@ export const ApproveUnAssignedUsers = createAsyncThunk(
     }
 )
 
+export const CreateUser = createAsyncThunk(
+    "UserApi/CreateUser",
+    async(values) => {
+        isLoadingData = true;
+        try{
+        let res = await axios
+        .post(`
+            ${process.env.API_URL}/UserApi/CreateUser`,
+
+            values.formData,
+
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${values.token}`
+                }
+            }
+        )
+        isLoadingData = false;
+        if(res.data.mtype === "success")
+        {
+            toast.success(`Welcome ${res.data.username}`)
+            return res.data;
+        }
+        if(res.data.mtype === "warning")
+        {
+            toast.error(res.data.message);
+            return res.data;
+        }
+    }
+        catch(ex) {
+                toast.error(ex.message)
+                return ex.message;
+        }
+    }
+)
+
 const authSlice = createSlice({
   name: "auth",
   initialState : {
@@ -279,6 +316,20 @@ const authSlice = createSlice({
             state.isLoading = false;
         })
         .addCase(ApproveUnAssignedUsers.rejected, (state, action) => {
+            state.state = "failed";
+            state.error = action.error.message || action.payload.message;
+            state.isLoading = false;
+        })
+        .addCase(CreateUser.pending, (state) => {
+            state.state = "loading";
+            state.isLoading = true;
+        })
+        .addCase(CreateUser.fulfilled, (state, action) => {
+            state.state = "succeeded";
+            state.isLoading = false;
+            state.regData = action.payload;
+        })
+        .addCase(CreateUser.rejected, (state, action) => {
             state.state = "failed";
             state.error = action.error.message || action.payload.message;
             state.isLoading = false;

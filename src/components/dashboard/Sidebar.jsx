@@ -80,11 +80,11 @@ export default function Sidebar() {
                 <div className="py-1">
                   <a onClick={() =>{
                     if(userData !== null && userData.rolename === "hradmin")
-                      router.push("/hradmin/addusers")
+                      router.push("/hradmin/adduser")
                     else
-                      router.push("/admin/addusers")
+                      router.push("/admin/adduser")
                   }} className="block py-2 px-2 text-gray-600 hover:bg-blue-50 rounded-md">
-                    Add Users
+                    Add User
                   </a>
                 </div>
               </div>
