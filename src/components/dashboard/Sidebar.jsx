@@ -87,6 +87,16 @@ export default function Sidebar() {
                     Add User
                   </a>
                 </div>
+                <div className="py-1">
+                  <a onClick={() =>{
+                    if(userData !== null && userData.rolename === "hradmin")
+                      router.push("/hradmin/addcandidate")
+                    else
+                      router.push("/admin/addcandidate")
+                  }} className="block py-2 px-2 text-gray-600 hover:bg-blue-50 rounded-md">
+                    Add Candidate
+                  </a>
+                </div>
               </div>
             )}
           </li>
@@ -110,6 +120,21 @@ export default function Sidebar() {
             </a>
           </li>
           </>)}
+          {
+            userData !== null && userData.rolename === "hradmin" && (
+              <>
+            <li className="mb-2">
+            <a href="#" className="flex items-center space-x-2 p-2 hover:bg-gray-100 text-blue-800 rounded-md"
+            onClick={() => router.push("/hradmin/accountsdashboard")}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              <span>Accounts</span>
+            </a>
+          </li>
+          </>
+            )
+          }
         </ul>
       </div>
     </div>

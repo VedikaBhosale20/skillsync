@@ -4,17 +4,17 @@ import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import UserForm from '@/components/forms/UserForm';
-import { CreateUser } from '@/lib/features/auth/AuthSlice';
+import CandidateForm from '@/components/forms/CandidateForm';
+import { CreateCandidate } from '@/lib/features/OrganizationSlice/OrgSlice';
 
-const AddUser = () => {
+const AddCandidate = () => {
     const [userData, setUserData] = useState(null);
     const [formInitialized, setFormInitialized] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
-    const data = useSelector((state) => state.auth.regData);
-    const error = useSelector((state) => state.auth.error);
-    const isLoading = useSelector((state) => state.auth.isLoading);
+    const data = useSelector((state) => state.organization.data);
+    const error = useSelector((state) => state.organization.error);
+    const isLoading = useSelector((state) => state.organization.isLoading);
 
     useEffect(() => {
         try {
@@ -46,30 +46,27 @@ const AddUser = () => {
         userid: userData?.tokenid || "",
         rolename: userData?.rolename || "",
         roleid: userData?.tokenid || "",
-        roletypeid: "",
+        organizationid: userData?.organizationid || "",
         firstname: "",
         lastname: "",
-        email: "",
-        mobile: "",
+        gender: "",
         username: "",
         password: "",
-        gender: "",
+        mobile: "",
+        email: "",
+        dob: "",
         pan: "",
         aadhar: "",
-        dob: "",
-        organizationid: userData?.organizationid || "",
-        profilepic: null,
-        organizationname: "",
-        organizationdescription: "",
-        contact: "",
-        website: "",
-        location: "",
-        organizationtypeid: "",
+        specializationid: "",
+        educationtypeid: "",
+        institution: "",
+        startdate: "",
+        enddate: "",
       };
 
       const handleSubmit = async (formData) => {
         console.log("Form Data:", formData);
-        dispatch(CreateUser({formData: formData, token: userData?.token}));
+        dispatch(CreateCandidate({formData: formData, token: userData?.token}));
         if(data !== null && data.mtype === "success")
         {
             toast.success(data.message);
@@ -99,7 +96,7 @@ const AddUser = () => {
                 <div className="container mx-auto py-8">
                     <h1 className="text-2xl font-bold mb-4">Add Organization</h1>
                     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                        <UserForm
+                        <CandidateForm
                             initialValues={initialValues} 
                             submitAction={handleSubmit}
                             rolename={userData?.rolename}
@@ -115,4 +112,4 @@ const AddUser = () => {
     );
 }
 
-export default AddUser
+export default AddCandidate;
